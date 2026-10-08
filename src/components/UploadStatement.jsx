@@ -13,17 +13,18 @@ export default function UploadStatement({ onUploadSuccess }) {
       const formData = new FormData();
       formData.append('file', file);
 
+      const url = 'http://localhost:8080/api/subscriptions/upload';
+
       setLoading(true);
       try {
-        const response = await axios.post(
-          'http://localhost:8080/api/subscriptions/upload',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
+        console.log('Uploading to:', url);
+        const response = await axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        console.log('Response:', response.data);
 
         if (onUploadSuccess) {
           onUploadSuccess(response.data);
@@ -58,10 +59,10 @@ export default function UploadStatement({ onUploadSuccess }) {
     <div className="w-full max-w-xl mx-auto my-8">
       <div className="bg-white rounded-lg shadow-md p-8 text-center border border-gray-100">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Upload Bank Statement
+          Where does your money go?
         </h2>
         <p className="text-gray-500 mb-6 text-sm">
-          Drag and drop your PDF bank statement to audit recurring subscriptions automatically.
+          Upload your bank statement to see your fixed monthly expenses in 30 seconds. No login needed.
         </p>
 
         <div
@@ -132,6 +133,10 @@ export default function UploadStatement({ onUploadSuccess }) {
             </div>
           )}
         </div>
+
+        <p className="text-xs text-gray-400 text-center mt-4">
+          🔒 Your PDF is processed locally. We don't store it.
+        </p>
       </div>
     </div>
   );
